@@ -1,0 +1,11 @@
+-: 
+    RNGDisplayMod
+    Authors:
+        Museus (Discord: Museus#7777)
+        Ellomenop (Discord: ellomenop#2254)
+        Kossetsu (Discord: Kossetsu#7660)
+
+  Adds an RNG Overlay to Hades, to display Seed and RNG Uses
+  Optional DebugBoxMod support
+:-
+Import "RNGDisplayMod.lua"
