@@ -1,0 +1,20 @@
+-:
+  DebugBoxMod v1.0
+  Authors:
+    Museus (Discord: Museus#7777)
+    Ellomenop (Discord: ellomenop#2254)
+  
+  This mod uses PrintUtil to create a Debug Box that can be printed to by
+  other mods.
+
+  This mod will attempt to load first. This is so that other mods can update
+  their config based on whether this mod is installed.
+
+  For actual debugging, it is better to use the official DebugOverlay provided
+  by Supergiant, but this can be used for players not running in debug-mode.
+
+  Example:
+    config.PrintToDebug = config.PrintToDebug and DebugBoxMod
+:-
+Load Priority 2
+Import DebugBoxMod.lua
