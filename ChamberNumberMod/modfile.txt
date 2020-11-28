@@ -1,9 +1,0 @@
--: 
-    ChamberNumberMod
-    Authors:
-      Museus (Discord: Museus#7777)
-      Entry point stolen from Ellomenop (Discord: ellomenop#2254)
-
-    Shows the Chamber Number except during loading screens
-:-
-Import "ChamberNumberMod.lua"
