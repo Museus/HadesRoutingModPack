@@ -50,5 +50,9 @@ This mod adds an RNG Overlay to Hades, to display Seed and RNG uses. It can also
  - ShowUses (if false, does not display RNG uses)
  - OutputToDebug (if false, does not print information to DebugBoxMod)
 
-# Other Mods
+# Other Tools/Mods
 Not included in this list, but incredibly useful, is [ParasDoorPredictions](https://github.com/parasHadesMods/ParasDoorPredictions). It  is strongly recommended to install this mod when creating a route, but is not necessary for running a route that was already made.
+
+[Ello's Boon Selector](https://github.com/ellomenop/EllosStartingBoonSelectorMod) makes it incredibly easy to get the starting seed you want, and is necessary for running any route that does not have a SaveManager pack associated with it.
+
+[HadesSaveManager](https://github.com/museus/HadesSaveManager) is an external save manager that allows you to create snapshots throughout a run. It is specifically targeted at assisting with routed runs.
