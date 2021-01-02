@@ -1,0 +1,9 @@
+-: 
+    RngInterface
+    Authors:
+        Museus (Discord: Museus#7777)
+
+  Adds an interface to allow other mods to track Seed and RNG Increments.
+:-
+Load Priority 50
+Import "RngInterface.lua"

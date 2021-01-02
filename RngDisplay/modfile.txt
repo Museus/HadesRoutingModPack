@@ -8,4 +8,4 @@
   Adds an RNG Overlay to Hades, to display Seed and RNG Uses
   Optional DebugBoxMod support
 :-
-Import "RNGDisplayMod.lua"
+Import "RngDisplay.lua"
