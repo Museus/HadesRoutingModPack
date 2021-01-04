@@ -17,6 +17,7 @@ RngInterface.UseHooks = {}
 RngInterface.SeedHooks = {}
 
 --- Increments the global RNG counter or resets it to a specfic value
+-- Runs any functions that have been added to the UseHooks table
 function RngInterface.UpdateCurrentUses( resetToOffset )
     if resetToOffset ~= nil then
         RngInterface.CurrentUses = resetToOffset
@@ -29,7 +30,8 @@ function RngInterface.UpdateCurrentUses( resetToOffset )
     end
 end
 
-
+--- Updates the CurrentSeed to the specified value
+-- Runs any functions that have been added to the SeedHooks table
 function RngInterface.UpdateCurrentSeed( seed )
     RngInterface.CurrentSeed = seed
     for idx, func in ipairs(RngInterface.SeedHooks) do
@@ -37,11 +39,18 @@ function RngInterface.UpdateCurrentSeed( seed )
     end
 end
 
-
+--- This function can be used to run a function any time CurrentUses is updated
+-- Example:
+-- local function RunThisOnRngUse() end
+-- RngInterface.AddUseHook(RunThisOnRngUse)
 function RngInterface.AddUseHook( target_function )
     table.insert(RngInterface.UseHooks, target_function)
 end
 
+--- This function can be used to run a function any time CurrentSeed is updated
+-- Example:
+-- local function RunThisOnSeedChange() end
+-- RngInterface.AddSeedHook(RunThisOnSeedChange)
 function RngInterface.AddSeedHook( target_function )
     table.insert(RngInterface.SeedHooks, target_function)
 end
@@ -267,4 +276,10 @@ ModUtil.BaseOverride("RemoveRandomValue", function ( tableArg, rng )
 
     tableArg[randomIndex] = nil
     return retVal
+end, RngInterface)
+
+-- If loading Courtyard, reinitialize seed for any mods that need the Room to exist
+ModUtil.WrapBaseFunction("SetupExitDoor", function ( baseFunc, source )
+    RngInterface.UpdateCurrentSeed( RngInterface.CurrentSeed )
+    baseFunc(source)
 end, RngInterface)
