@@ -1,0 +1,8 @@
+-: 
+    RouteVerifier
+    Authors:
+        Museus (Discord: Museus#7777)
+
+  Allows you to populate a list of seeds, and notifies you when you are off route.
+:-
+Import "RouteVerifier.lua"
