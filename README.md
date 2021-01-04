@@ -29,6 +29,8 @@ Each of these mods can be toggled on and off, and in some cases have more custom
 ## DebugBoxMod
 This mod adds a text overlay to the game, which can be used by other mods to display information that might be useful to the player. This is different from the official Debug Overlay that SGG has made available in that it must be printed to directly by a mod and is not part of the base game.
 
+This mod is potentially useful for creating a route, but not as useful for just running the route. Therefore, it is disabled by default.
+
 The options for this include:
  - ShowDebug (if false, no output will be shown)
  - ShowDetailedDebug (if false, stack prints will not be shown)
@@ -44,11 +46,17 @@ This is a small library of functions that help print information to the screen. 
 ## ShowChamberNumber
 This mod just makes it so that your current depth shows up at all times, rather than only when you open the Boon Summary menu. This mod has one option - `ShowDepth` - which can be toggled to turn this mod on and off.
 
-## RngDisplayMod
-This mod adds an RNG Overlay to Hades, to display Seed and RNG uses. It can also display most of the rolls that happen to the DebugBoxMod, assuming that is installed and turned on. The options available are:
+## RngInterface
+This mod hooks into RNG and tracks the seed and increment. By itself, it does not do anything, but it allows other mods to provide functions that will be run whenever RNG is incremented or the Seed changes.
+
+## RngDisplay
+This mod adds an RNG Overlay to Hades, to display Seed and RNG uses. It depends on RngInterface. It can also display most of the rolls that happen to the DebugBoxMod, assuming that is installed and turned on. The options available are:
  - ShowSeed (if false, does not display the seed)
  - ShowUses (if false, does not display RNG uses)
  - OutputToDebug (if false, does not print information to DebugBoxMod)
+
+## RouteVerifier
+This mod adds an indicator for whether you are on route. It is pre-populated with [the Nemesis route by ParadigmSort](https://docs.google.com/spreadsheets/d/1-wTLltI0pffB6FCsooAphUBbq6NFeTednH--71AC0rY) but can track any route.
 
 # Other Tools/Mods
 Not included in this list, but incredibly useful, is [ParasDoorPredictions](https://github.com/parasHadesMods/ParasDoorPredictions). It  is strongly recommended to install this mod when creating a route, but is not necessary for running a route that was already made.
