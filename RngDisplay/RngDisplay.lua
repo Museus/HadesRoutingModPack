@@ -54,19 +54,21 @@ local function DisplayCurrentSeed()
     )
 end
 
--- Make sure RngInterface exists. If it doesn't, throw an error and disable mod
-if not RngInterface then
-    local error = "RngInterface does not exist! Please install it to use RngDisplay."
-    if config.OutputToDebug then
-        DebugBoxMod.writeToDebugBox(error)
-    else
-        ModUtil.Hades.PrintOverhead(error)
-    end
+ModUtil.LoadOnce(function()
+    -- Make sure RngInterface exists. If it doesn't, throw an error and disable mod
+    if not RngInterface then
+        local error = "RngInterface does not exist! Please install it to use RngDisplay."
+        if config.OutputToDebug then
+            DebugBoxMod.writeToDebugBox(error)
+        else
+            ModUtil.Hades.PrintOverhead(error)
+        end
 
-    RngDisplay.config.ShowSeed = false
-    RngDisplay.config.ShowUses = false
-else
-    -- Tell RngInterface to call these functions when necessary
-    RngInterface.AddUseHook(DisplayCurrentUses)
-    RngInterface.AddSeedHook(DisplayCurrentSeed)
-end
+        RngDisplay.config.ShowSeed = false
+        RngDisplay.config.ShowUses = false
+    else
+        -- Tell RngInterface to call these functions when necessary
+        RngInterface.AddUseHook(DisplayCurrentUses)
+        RngInterface.AddSeedHook(DisplayCurrentSeed)
+    end
+end)
