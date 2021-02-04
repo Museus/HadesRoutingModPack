@@ -44,7 +44,7 @@ function PrintUtil.createOverlayLine(obstacleName, text, kwargs)
             Name = "BlankObstacle",
             X = x_pos,
             Y = y_pos,
-            Group = "Combat_Menu_Overlay"
+            Group = "Combat_Menu_TraitTray_Overlay"
         })
 
         CreateTextBox(
