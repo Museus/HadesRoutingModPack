@@ -23,59 +23,102 @@ local config = {
     },
     TrackRun = true,
     SeedList = {
-        436159,
-        1986760314,
-        406074603,
-        160448433,
-        1315722240,
-        -86510397,
-        -1541732175,
-        -244316655,
-        -2047268340,
-        -382364750,
-        -392624732,
-        -1387678312,
-        -1645995698,
-        1491740693,
-        -1173845701,
-        -1569982661,
-        -200551125,
-        1823074467,
-        -1554287023,
-        890544923,
-        -620189253,
-        788488425,
-        -1298381135,
-        2056809742,
-        -224681519,
-        1418351507,
-        680038026,
-        716023311,
-        -448519370,
-        1053625744,
-        -1335624333,
-        207026649,
-        -144540804,
-        -94079441,
-        -1866532976,
-        -769303042,
-        -1048772740,
-        2012142207,
-        869109455,
-        -1494782611,
-        -1257436870,
-        279728086,
-        -798446530,
-        -1234109731,
-        188502245,
-        -2110558149,
-        -1107125730,
-        1133800054,
+      -- Beo Route
+      588384,
+      1123323008,
+      -1312722704,
+      444389298,
+      1501741483,
+      984170559,
+      -1496182771,
+      -651885696,
+      -1539109952,
+      1323767801,
+      -22236989,
+      663998103,
+      -773466173,
+      -1272405814,
+      1976652988,
+      1620444090,
+      -1411792967,
+      -876083783,
+      1767260490,
+      1312255047,
+      1422679429,
+      -859577256,
+      446090851,
+      -818917367,
+      -826183828,
+      780225667,
+      -1040602957,
+      -628103582,
+      1195302451,
+      1961970774,
+      -984109,
+      427567441,
+      -1959782252,
+      -1014273309,
+      695773260,
+      -1729341710,
+      1483416299,
+      -817935511,
+      855611882,
+      -1868021254,
+      1241724750,
+      11325215,
+      -1092406353,
+      1067572172,
+      -1804376631,
+      -2112617507,
+      -1045069623,
+      -1227795609
     },
     OutputToDebug = false
 }
 config.OutputToDebug = config.OutputToDebug and DebugBoxMod
 RouteVerifier.config = config
+
+--- Given previous seed, current seed, and target seed, calculate offset
+--  between current seed and target seed.
+--  Original Credit: paradigmsort#1061
+local function GetSeedOffset( previousSeed, currentSeed, targetSeed )
+  -- save RngInterface state
+  local rngState = {
+    Seed = RngInterface.CurrentSeed,
+    Uses = RngInterface.CurrentUses,
+  }
+  RngInterface.DisableHooks()
+
+  -- set seed to previous
+  NextSeeds[1] = previousSeed
+  RandomSynchronize()
+
+  local currentSeedOffset = nil
+  local targetSeedOffset = nil
+  for i=1,200 do
+    local s = RandomInt(-2147483647, 2147483646)
+    if s == currentSeed then
+      currentSeedOffset = i
+    end
+    if s == targetSeed then
+      targetSeedOffset = i
+    end
+    if currentSeedOffset and targetSeedOffset then
+      break
+    end
+  end
+
+  -- restore
+  RngInterface.EnableHooks()
+  NextSeeds[1] = rngState.Seed
+  RandomSynchronize( rngState.Uses )
+
+  if currentSeedOffset and targetSeedOffset then
+    return currentSeedOffset - targetSeedOffset
+  else
+    return nil
+  end
+end
 
 --[[ DISPLAY FUNCTIONS ]]
 local function DisplayOnRoute()
@@ -101,6 +144,7 @@ local function DisplayOnRoute()
     end
 
     local chamber_number = 1
+
     -- Check if sitting in Courtyard
     if CurrentRun.Hero and not CurrentRun.Hero.IsDead then
         chamber_number = GetRunDepth(CurrentRun)
@@ -110,6 +154,16 @@ local function DisplayOnRoute()
     -- If fell off the route, update message and color
     if RouteVerifier.config.SeedList[chamber_number] ~= RngInterface.CurrentSeed then
         message = "Off Route!"
+        if chamber_number > 1 then
+          local offset = GetSeedOffset(
+            RouteVerifier.config.SeedList[chamber_number - 1],
+            RngInterface.CurrentSeed,
+            RouteVerifier.config.SeedList[chamber_number],
+          )
+          if offset then
+            message = string.format("%s %+d", message, offset)
+          end
+        end
         format.color = Color.PenaltyRed
     end
 
@@ -133,6 +187,6 @@ ModUtil.LoadOnce(function()
         config.TrackRun = false
     else
         -- Tell RngInterface to call Display Function when seed changes
-        RngInterface.AddUseHook(DisplayOnRoute)
+        RngInterface.AddSeedHook(DisplayOnRoute)
     end
 end)
