@@ -9,12 +9,13 @@
 ModUtil.RegisterMod("RngInterface")
 
 local config = {
-    OutputToDebug = true, -- If true, each roll will be printed to the DebugBoxMod
+    OutputToDebug = false, -- If true, each roll will be printed to the DebugBoxMod
 }
 config.OutputToDebug = config.OutputToDebug and DebugBoxMod
 RngInterface.config = config
 RngInterface.UseHooks = {}
 RngInterface.SeedHooks = {}
+RngInterface.PauseHooks = false
 
 --- Increments the global RNG counter or resets it to a specfic value
 -- Runs any functions that have been added to the UseHooks table
@@ -25,6 +26,7 @@ function RngInterface.UpdateCurrentUses( resetToOffset )
         RngInterface.CurrentUses = (RngInterface.CurrentUses or 0) + 1
     end
 
+    if RngInterface.PauseHooks then return end
     for idx, func in ipairs(RngInterface.UseHooks) do
         func()
     end
@@ -34,6 +36,8 @@ end
 -- Runs any functions that have been added to the SeedHooks table
 function RngInterface.UpdateCurrentSeed( seed )
     RngInterface.CurrentSeed = seed
+
+    if RngInterface.PauseHooks then return end
     for idx, func in ipairs(RngInterface.SeedHooks) do
         func()
     end
@@ -53,6 +57,24 @@ end
 -- RngInterface.AddSeedHook(RunThisOnSeedChange)
 function RngInterface.AddSeedHook( target_function )
     table.insert(RngInterface.SeedHooks, target_function)
+end
+
+--- Disable all hooks until EnableHooks is called
+-- Example:
+-- RngInterface.DisableHooks()
+-- ... RNG Intensive Operation ...
+-- RngInterface.EnableHooks()
+function RngInterface.DisableHooks()
+    RngInterface.PauseHooks = true
+end
+
+--- Enable hooks, if paused
+-- Example:
+-- RngInterface.DisableHooks()
+-- ... RNG Intensive Operation ...
+-- RngInterface.EnableHooks()
+function RngInterface.EnableHooks()
+    RngInterface.PauseHooks = false
 end
 
 --[[ Hooks for tracking Rng ]]
